@@ -112,7 +112,7 @@ def trim_article(url):
         chapt_name = response.xpath("//div[@class='bookname']/h1/text()")
         if chapt_name:
             chapt_name = chapt_name[0]
-            txt = response.xpath("//*[@id='content']/text()")
+            txt = response.xpath("//*[@id='content']/p/text()")
         else:
             chapt_name = response.xpath("//*[@id='content']/div[1]/text()")[0]
             txt = response.xpath("//div[@class='text']/text()")
