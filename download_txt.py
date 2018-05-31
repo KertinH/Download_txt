@@ -106,17 +106,16 @@ def trim_article(url):
     res = requests.get(url, headers = {'User-Agent':random.choice(user_agent)}, timeout=10)
     res = etree.HTML(res.content.decode('gbk'))
     chapter_url = res.xpath("//*[@id='list']/dl/dd/a/@href")[9:]
-    for u in chapter_url:
+    chapter_name = res.xpath("//*[@id='list']/dl/dd/a/text()")[9:]
+    for u, ch_name in zip(chapter_url, chapter_name):
         response = requests.get(u, headers = {'User-Agent':random.choice(user_agent)}, timeout=10)
         response = etree.HTML(response.content.decode('gbk'))
         chapt_name = response.xpath("//div[@class='bookname']/h1/text()")
         if chapt_name:
-            chapt_name = chapt_name[0]
             txt = response.xpath("//*[@id='content']/p/text()")
         else:
-            chapt_name = response.xpath("//*[@id='content']/div[1]/text()")[0]
             txt = response.xpath("//div[@class='text']/text()")
-        download_book(book_name, chapt_name, txt)
+        download_book(book_name, ch_name, txt)
         if count == len(chapter_url):
             print('{} 100% 下载完毕'.format(book_name))
         else:
